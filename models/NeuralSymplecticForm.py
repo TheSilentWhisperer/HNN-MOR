@@ -22,12 +22,17 @@ class NeuralSymplecticForm(nn.Module):
 
         #X_H is such that W_u^T * X_H = grad_H
         X_H_u = torch.linalg.solve(W_u.permute(0, 2, 1), grad_H_u)
-
-        if torch.max(X_H_u) > 1e2:
-            print("X_H_u is too large")
-            print("X_H_u", torch.max(X_H_u))
-
         return X_H_u
+    
+    def predict(self, u):
+        self.eval()
+        with torch.no_grad():
+            W_u = self.W(u.unsqueeze(0))
+            grad_H_u = self.grad_H(u.unsqueeze(0))
+
+            #X_H is such that W_u^T * X_H = grad_H
+            X_H_u = torch.linalg.solve(W_u.permute(0, 2, 1), grad_H_u)
+        return X_H_u.squeeze(0)
     
 class WNN(nn.Module):
     """
@@ -40,11 +45,13 @@ class WNN(nn.Module):
 
         # The underlying network that estimates the 1-form
         self.fNN = nn.Sequential(
-            nn.Linear(4, 64),
+            nn.Linear(4, 128),
             nn.ReLU(),
-            nn.Linear(64, 64),
+            nn.Linear(128, 128),
             nn.ReLU(),
-            nn.Linear(64, self.manifold_dim)
+            nn.Linear(128, 128),
+            nn.ReLU(),
+            nn.Linear(128, self.manifold_dim)
         )
 
     def forward(self, u):
@@ -66,11 +73,13 @@ class GradHNN(nn.Module):
         self.manifold_dim = manifold_dim
 
         self.HNN = nn.Sequential(
-            nn.Linear(4, 64),
+            nn.Linear(4, 128),
             nn.ReLU(),
-            nn.Linear(64, 64),
+            nn.Linear(128, 128),
             nn.ReLU(),
-            nn.Linear(64, self.manifold_dim)
+            nn.Linear(128, 128),
+            nn.ReLU(),
+            nn.Linear(128, self.manifold_dim)
         )
 
     def forward(self, u):
