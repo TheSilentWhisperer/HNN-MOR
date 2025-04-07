@@ -1,0 +1,12 @@
+{
+    "DATA_PATH": "datasets/2d_pend/unact_small_dq0.pickle",
+    "BATCH_SIZE": 128,
+    "LR": 0.0005,
+    "GRAD_CLIP": 0.1,
+    "VAL_INTERVAL": 100,
+    "NUM_EPOCHS": 100,
+    "NUM_TRAJ": 10,
+    "CLOSENESS_LOSS_WEIGHT": 0.1,
+    "BEST_LOSS": 0.012053907675363008,
+    "RUN_ID": "20250407-165426"
+}

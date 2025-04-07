@@ -45,7 +45,7 @@ class WNN(nn.Module):
 
         # The underlying network that estimates the 1-form
         self.fNN = nn.Sequential(
-            nn.Linear(4, 128),
+            nn.Linear(self.manifold_dim, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
@@ -73,7 +73,7 @@ class GradHNN(nn.Module):
         self.manifold_dim = manifold_dim
 
         self.HNN = nn.Sequential(
-            nn.Linear(4, 128),
+            nn.Linear(self.manifold_dim, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
