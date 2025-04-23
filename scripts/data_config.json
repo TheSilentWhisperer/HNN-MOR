@@ -1,0 +1,4 @@
+{
+    "NUM_TRAJ": 100,
+    "DATA_PATH": "datasets/2d_pend/unact_small_dq0.pickle"
+}

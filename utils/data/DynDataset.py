@@ -1,8 +1,6 @@
 import pickle
 import torch
 from torch.utils.data import Dataset
-import numpy as np
-from numpy.random import choice
 
 class DynDataset(Dataset):
 
@@ -29,7 +27,7 @@ class DynDataset(Dataset):
 
         self.data_type = data_type
         self.n_data_point = self.traj_len * self.num_traj_split if data_type == "point" else self.num_traj_split
-        self.manifold_dim = self.data["q"].shape[-1] * 2
+        self.manifold_dim = self.data["q"].shape[-1]
 
     def __len__(self):
         return self.n_data_point

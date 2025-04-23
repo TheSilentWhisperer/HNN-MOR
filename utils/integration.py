@@ -1,14 +1,16 @@
 import torch
+from tqdm import tqdm
 
-def RK4(model, y0, t):
-    y = [y0]
-    for i in range(len(t) - 1):
-        h = t[i + 1] - t[i]
-        k1 = model.predict(y[i])
-        k2 = model.predict(y[i] + h / 2 * k1)
-        k3 = model.predict(y[i] + h / 2 * k2)
-        k4 = model.predict(y[i] + h * k3)
-        y_next = y[i] + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
-        y.append(y_next)
+def RK4(model, u0, tau, t):
+    
+    u = [u0]
 
-    return torch.stack(y)
+    for i in tqdm(range(1, len(t))):
+        h = t[i] - t[i-1]
+        k1 = model.vect_field(u[i-1], tau[i-1])
+        k2 = model.vect_field(u[i-1] + h / 2 * k1, tau[i-1])
+        k3 = model.vect_field(u[i-1] + h / 2 * k2, tau[i-1])
+        k4 = model.vect_field(u[i-1] + h * k3, tau[i-1])
+        u.append(u[i-1] + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4))
+
+    return torch.stack(u)
